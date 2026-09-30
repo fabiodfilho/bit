@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.db.database import engine, Base, SessionLocal
-from app.db.models import Categoria
+from app.db.models import Categoria, Usuario
+from app.core.security import gerar_hash_senha
+from app.api.v1.auth import router as auth_router
 
-# Criar tabelas no banco de dados automaticamente na inicialização
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -20,16 +21,36 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Evento de inicialização para cadastrar categorias padrão, se não existirem
+# Registrar Rotas de Autenticação
+app.include_router(auth_router, prefix="/api/v1")
+
 @app.on_event("startup")
-def popular_categorias_iniciais():
+def popular_dados_iniciais():
     db = SessionLocal()
     try:
-        categorias_padrao = ["TI", "RH", "Compras", "Financeiro", "Infraestrutura"]
-        for nome_cat in categorias_padrao:
-            existe = db.query(Categoria).filter(Categoria.nome == nome_cat).first()
-            if not existe:
+        # Populate Categorias
+        categorias = ["TI", "RH", "Compras", "Financeiro", "Infraestrutura"]
+        for nome_cat in categorias:
+            if not db.query(Categoria).filter(Categoria.nome == nome_cat).first():
                 db.add(Categoria(nome=nome_cat))
+
+        # Create demo users for testing
+        if not db.query(Usuario).filter(Usuario.usuario == "admin").first():
+            admin = Usuario(
+                nome="Administrador Bit",
+                usuario="admin",
+                senha_hash=gerar_hash_senha("123456")
+            )
+            db.add(admin)
+
+        if not db.query(Usuario).filter(Usuario.usuario == "dev.junior").first():
+            dev = Usuario(
+                nome="Desenvolvedor Júnior",
+                usuario="dev.junior",
+                senha_hash=gerar_hash_senha("123456")
+            )
+            db.add(dev)
+
         db.commit()
     finally:
         db.close()
@@ -39,5 +60,5 @@ def read_root():
     return {
         "sistema": "BitDesk API",
         "status": "Online",
-        "mensagem": "Banco de dados conectado e tabelas criadas com sucesso!"
+        "mensagem": "Autenticação JWT ativa!"
     }
