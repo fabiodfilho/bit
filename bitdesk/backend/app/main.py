@@ -4,6 +4,7 @@ from app.db.database import engine, Base, SessionLocal
 from app.db.models import Categoria, Usuario
 from app.core.security import gerar_hash_senha
 from app.api.v1.auth import router as auth_router
+from app.api.v1.solicitacoes import router as solicitacoes_router
 
 Base.metadata.create_all(bind=engine)
 
@@ -23,6 +24,7 @@ app.add_middleware(
 
 # Registrar Rotas de Autenticação
 app.include_router(auth_router, prefix="/api/v1")
+app.include_router(solicitacoes_router, prefix="/api/v1")
 
 @app.on_event("startup")
 def popular_dados_iniciais():
