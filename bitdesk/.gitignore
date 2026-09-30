@@ -1,0 +1,19 @@
+# Ambientes Virtuais Python
+venv/
+ENV/
+env/
+
+# Ficheiros compilados do Python
+__pycache__/
+*.py[cod]
+
+# Base de dados local de testes (SQLite)
+*.db
+*.sqlite3
+
+# Variáveis de ambiente e segredos
+.env
+
+# IDEs e Editores
+.vscode/
+.idea/
