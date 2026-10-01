@@ -3,12 +3,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.db.database import engine, Base, SessionLocal
 from app.db.models import Categoria, Usuario
 from app.core.security import gerar_hash_senha
-
 from app.api.v1.auth import router as auth_router
 from app.api.v1.solicitacoes import router as solicitacoes_router
-from app.api.v1.dashboard import router as dashboard_router  # <--- Nova Importação
-from app.api.v1.auxiliares import router as auxiliares_router  # <--- Nova Importação
+from app.api.v1.dashboard import router as dashboard_router  
+from app.api.v1.auxiliares import router as auxiliares_router  
+from app.api.v1.usuarios import router as usuarios_router
+from fastapi.staticfiles import StaticFiles
+import os
 
+os.makedirs("uploads/avatars", exist_ok=True)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -16,6 +19,8 @@ app = FastAPI(
     description="API REST para o Portal de Solicitações Internas - bit Soluções",
     version="1.0.0",
 )
+
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 app.add_middleware(
     CORSMiddleware,
@@ -28,8 +33,9 @@ app.add_middleware(
 # Registrar Rotas
 app.include_router(auth_router, prefix="/api/v1")
 app.include_router(solicitacoes_router, prefix="/api/v1")
-app.include_router(dashboard_router, prefix="/api/v1")     # <---
-app.include_router(auxiliares_router, prefix="/api/v1")    # <---
+app.include_router(dashboard_router, prefix="/api/v1")     
+app.include_router(auxiliares_router, prefix="/api/v1")    
+app.include_router(usuarios_router, prefix="/api/v1")
 
 @app.on_event("startup")
 def popular_dados_iniciais():

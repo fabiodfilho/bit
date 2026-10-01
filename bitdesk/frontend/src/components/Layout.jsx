@@ -1,10 +1,12 @@
 import { useContext } from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { Outlet, Link, NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { LayoutDashboard, ClipboardList, PlusCircle, LogOut, User } from 'lucide-react';
+import { ThemeContext } from '../context/ThemeContext'; 
+import { LayoutDashboard, ClipboardList, PlusCircle, LogOut, User, Sun, Moon } from 'lucide-react'; // Ícones de Sol e Lua
 
 export const Layout = () => {
   const { usuario, logout } = useContext(AuthContext);
+  const { tema, toggleTema } = useContext(ThemeContext); 
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -19,20 +21,18 @@ export const Layout = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col md:flex-row">
+    <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 flex flex-col md:flex-row transition-colors duration-300">
       
       {/* Sidebar Lateral */}
-      <aside className="w-full md:w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between p-4 flex-shrink-0">
+      <aside className="w-full md:w-64 bg-white border-r border-slate-200 dark:bg-slate-900 dark:border-slate-800 flex flex-col justify-between p-4 flex-shrink-0 transition-colors duration-300">
         <div>
           {/* Logo */}
-          <div className="flex items-center gap-3 px-3 py-4 mb-6 border-b border-slate-800">
-            <div className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-white shadow-md shadow-blue-600/30">
-              BIT
-            </div>
-            <div>
-              <h2 className="font-bold text-lg tracking-wide text-white leading-none">BitDesk</h2>
-              <span className="text-[10px] text-blue-400 font-semibold tracking-wider uppercase">Portal Interno</span>
-            </div>
+          <div className="flex items-center gap-3 px-3 py-4 mb-6 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
+            <img
+              src="/Logo-BitDesk.png"
+              alt="BitDesk"
+              className=" w-auto max-w-full object-contain"
+            />
           </div>
 
           {/* Navegação */}
@@ -47,7 +47,7 @@ export const Layout = () => {
                     `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                       isActive
                         ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800/60'
                     }`
                   }
                 >
@@ -60,21 +60,24 @@ export const Layout = () => {
         </div>
 
         {/* Perfil & Logout */}
-        <div className="border-t border-slate-800 pt-4 mt-6">
-          <div className="flex items-center justify-between px-3 py-2 bg-slate-800/40 rounded-lg border border-slate-800">
-            <div className="flex items-center gap-2 overflow-hidden">
-              <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-slate-300 flex-shrink-0">
+        <div className="border-t border-slate-200 dark:border-slate-800 pt-4 mt-6 transition-colors duration-300">
+          <div className="flex items-center justify-between px-3 py-2 bg-slate-100 border border-slate-200 dark:bg-slate-800/40 dark:border-slate-800 rounded-lg transition-colors duration-300">
+            
+            {/* Transformamos esta div em um Link apontando para /perfil */}
+            <Link to="/perfil" className="flex items-center gap-2 overflow-hidden hover:opacity-70 transition-opacity cursor-pointer">
+              <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300 flex items-center justify-center flex-shrink-0 transition-colors duration-300">
                 <User className="w-4 h-4" />
               </div>
               <div className="truncate">
-                <p className="text-xs font-semibold text-slate-200 truncate">{usuario?.nome}</p>
-                <p className="text-[10px] text-slate-500 truncate">@{usuario?.usuario}</p>
+                <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate transition-colors duration-300">{usuario?.nome}</p>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate transition-colors duration-300">@{usuario?.usuario}</p>
               </div>
-            </div>
+            </Link>
+
             <button
               onClick={handleLogout}
               title="Sair do sistema"
-              className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-md transition-colors"
+              className="p-1.5 text-slate-500 hover:text-red-600 hover:bg-red-50 dark:text-slate-400 dark:hover:text-red-400 dark:hover:bg-red-500/10 rounded-md transition-colors"
             >
               <LogOut className="w-4 h-4" />
             </button>
@@ -83,9 +86,25 @@ export const Layout = () => {
       </aside>
 
       {/* Área Principal de Conteúdo */}
-      <main className="flex-1 p-6 overflow-y-auto">
-        <Outlet />
-      </main>
+      <div className="flex-1 flex flex-col h-screen overflow-hidden">
+        
+        {/* Header com o Botão de Tema */}
+        <header className="flex justify-end items-center px-6 py-3 border-b border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-800 transition-colors duration-300">
+          <button
+            onClick={toggleTema}
+            title={tema === 'light' ? "Mudar para Modo Escuro" : "Mudar para Modo Claro"}
+            className="p-2 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800 transition-colors duration-300"
+          >
+            {tema === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+          </button>
+        </header>
+
+        {/* Conteúdo Dinâmico das Rotas */}
+        <main className="flex-1 p-6 overflow-y-auto">
+          <Outlet />
+        </main>
+      </div>
+
     </div>
   );
 };

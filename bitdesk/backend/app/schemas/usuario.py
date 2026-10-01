@@ -1,11 +1,18 @@
 from pydantic import BaseModel, Field
 from datetime import datetime
+from typing import Optional
 
 # Schema para criação de usuário
 class UsuarioCriar(BaseModel):
     nome: str = Field(..., min_length=2, max_length=100, example="João Silva")
     usuario: str = Field(..., min_length=3, max_length=50, example="joao.silva")
     senha: str = Field(..., min_length=6, example="senha123")
+
+# Schema para atualização do próprio perfil
+class UsuarioAtualizar(BaseModel):
+    nome: Optional[str] = Field(None, min_length=2, max_length=100)
+    usuario: Optional[str] = Field(None, min_length=3, max_length=50)
+    senha: Optional[str] = Field(None, min_length=6)
 
 # Schema de resposta (retorno seguro sem a senha)
 class UsuarioResposta(BaseModel):
