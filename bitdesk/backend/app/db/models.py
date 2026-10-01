@@ -11,6 +11,7 @@ class Usuario(Base):
     usuario = Column(String(50), unique=True, nullable=False, index=True)
     senha_hash = Column(String(255), nullable=False)
     criado_em = Column(DateTime, default=datetime.utcnow, nullable=False)
+    avatar_url = Column(String, nullable=True)
 
     # Relacionamentos
     solicitacoes_criadas = relationship("Solicitacao", back_populates="solicitante")

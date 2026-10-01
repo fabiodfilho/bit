@@ -11,8 +11,9 @@ from app.schemas.usuario import UsuarioAtualizar, UsuarioResposta
 router = APIRouter(prefix="/usuarios", tags=["Usuários"])
 
 @router.post("/{user_id}/avatar")
-async def upload_avatar(user_id: int, file: UploadFile = File(...)):
-    # Caminho onde a imagem será salva
+async def upload_avatar(user_id: int, file: UploadFile = File(...), db: Session = Depends(get_db)):
+    os.makedirs("uploads/avatars", exist_ok=True)
+    
     file_path = f"uploads/avatars/{user_id}_{file.filename}"
     
     with open(file_path, "wb") as buffer:
@@ -20,8 +21,14 @@ async def upload_avatar(user_id: int, file: UploadFile = File(...)):
         
     avatar_url = f"/uploads/avatars/{user_id}_{file.filename}"
     
-    # Lembre-se de atualizar o campo `avatar_url` ou `foto` do usuário no banco de dados aqui!
-    # ...
+    usuario = db.query(Usuario).filter(Usuario.id == user_id).first()
+    if not usuario:
+        raise HTTPException(status_code=404, detail="Utilizador não encontrado")
+    
+    usuario.avatar_url = avatar_url
+    
+    db.commit()
+    db.refresh(usuario)
     
     return {"avatar_url": avatar_url, "mensagem": "Foto atualizada com sucesso!"}
 

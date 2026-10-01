@@ -65,14 +65,22 @@ export const Layout = () => {
             
             {/* Transformamos esta div em um Link apontando para /perfil */}
             <Link to="/perfil" className="flex items-center gap-2 overflow-hidden hover:opacity-70 transition-opacity cursor-pointer">
-              <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300 flex items-center justify-center flex-shrink-0 transition-colors duration-300">
+            <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300 flex items-center justify-center flex-shrink-0 overflow-hidden transition-colors duration-300">
+              {usuario?.avatar_url ? (
+                <img 
+                  src={`http://localhost:8000${usuario.avatar_url}`} 
+                  alt="Perfil" 
+                  className="w-full h-full object-cover" 
+                />
+              ) : (
                 <User className="w-4 h-4" />
-              </div>
-              <div className="truncate">
-                <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate transition-colors duration-300">{usuario?.nome}</p>
-                <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate transition-colors duration-300">@{usuario?.usuario}</p>
-              </div>
-            </Link>
+              )}
+            </div>
+            <div className="truncate">
+              <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate transition-colors duration-300">{usuario?.nome}</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate transition-colors duration-300">@{usuario?.usuario}</p>
+            </div>
+          </Link>
 
             <button
               onClick={handleLogout}

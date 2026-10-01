@@ -1,7 +1,8 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { LogIn, Lock, User, AlertCircle } from 'lucide-react';
+import api from '../services/api'; // <--- Importação da API adicionada
+import { LogIn, Lock, User as UserIcon, AlertCircle } from 'lucide-react';
 
 export const Login = () => {
   const [usuarioInput, setUsuarioInput] = useState('');
@@ -18,9 +19,25 @@ export const Login = () => {
     setCarregandoForm(true);
 
     try {
-      await login(usuarioInput, senhaInput);
-      navigate('/dashboard');
+      const res = await api.post('/auth/login', {
+        usuario: usuarioInput,
+        senha: senhaInput
+      });
+
+      // 1. Salva o token no navegador
+      const token = res.data.access_token;
+      localStorage.setItem('token', token);
+
+      // 2. Atualiza a instância para as próximas requisições
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+      // 3. Salva os dados do usuário no contexto
+      login(res.data.usuario);
+
+      navigate('/dashboard', { replace: true });
+      
     } catch (err) {
+      console.error("Erro capturado no frontend:", err);
       setErro(err.response?.data?.detail || 'Erro ao realizar login. Verifique suas credenciais.');
     } finally {
       setCarregandoForm(false);
@@ -55,7 +72,7 @@ export const Login = () => {
               Usuário
             </label>
             <div className="relative">
-              <User className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+              <UserIcon className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
                 type="text"
                 required
@@ -84,6 +101,7 @@ export const Login = () => {
             </div>
           </div>
 
+          {/* O botão foi alterado de type="button" para type="submit" e o onClick foi removido */}
           <button
             type="submit"
             disabled={carregandoForm}
