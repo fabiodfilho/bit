@@ -50,10 +50,13 @@ export const Login = () => {
         
         {/* Cabeçalho do Card */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-blue-600/20 text-blue-500 rounded-xl mb-4 border border-blue-500/30">
-            <LogIn className="w-7 h-7" />
+          <div> 
+            <img
+              src="/Logo-BitDesk.png"
+              alt="BitDesk"
+              className=" w-auto max-w-full object-contain"
+            />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-wide">BitDesk</h1>
           <p className="text-slate-600 dark:text-slate-400 text-sm mt-1">Portal de Solicitações Internas</p>
         </div>
 
@@ -116,7 +119,7 @@ export const Login = () => {
         </form>
 
         <div className="mt-8 text-center text-xs text-slate-500">
-          bit Soluções &copy; 2026 - Desenvolvedor Júnior
+          Bit Soluções &copy; 2026 - By Fábio Dantas - Desenvolvedor Júnior
         </div>
       </div>
     </div>
