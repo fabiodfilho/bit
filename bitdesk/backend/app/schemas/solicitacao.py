@@ -26,8 +26,8 @@ class SolicitacaoCriar(BaseModel):
 
 # Schema de edição
 class SolicitacaoAtualizar(BaseModel):
-    titulo: Optional[str] = Field(None, min_length=3, max_length=150)
-    descricao: Optional[str] = Field(None, min_length=5)
+    titulo: Optional[str] = Field(None, min_length=1, max_length=150)
+    descricao: Optional[str] = Field(None, min_length=1)
     categoria_id: Optional[int] = None
 
 # Schema de alteração de status

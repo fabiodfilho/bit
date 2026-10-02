@@ -72,20 +72,7 @@ export const Dashboard = () => {
   return (
     <div className="space-y-8">
       {/* Cabeçalho da Página */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-wide">Painel de Indicadores</h1>
-          <p className="text-slate-600 dark:text-slate-400 text-sm">Resumo do fluxo de chamados do BitDesk</p>
-        </div>
-        <Link
-          to="/solicitacoes/nova"
-          className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2.5 rounded-lg shadow-lg shadow-blue-600/30 transition-all self-start sm:self-auto"
-        >
-          <PlusCircle className="w-5 h-5" />
-          Nova Solicitação
-        </Link>
-      </div>
-
+      
       {/* Cards de Métricas */}
       {carregando ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

@@ -111,7 +111,7 @@ export const Solicitacoes = () => {
   const handleCriarSolicitacao = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/solicitacoes', {
+      await api.post('/solicitacoes/', {
         titulo: novoTitulo,
         descricao: novaDescricao,
         categoria_id: parseInt(novaCategoriaId)
@@ -123,7 +123,11 @@ export const Solicitacoes = () => {
       setNovaCategoriaId('');
       carregarSolicitacoes();
     } catch (err) {
-      toast.error(err.response?.data?.detail || 'Erro ao criar solicitação.');
+      const detalhe = err.response?.data?.detail;
+      const mensagem = Array.isArray(detalhe)
+        ? detalhe.map((item) => item.msg).filter(Boolean).join(' ')
+        : detalhe;
+      toast.error(typeof mensagem === 'string' ? mensagem : 'Erro ao criar solicitação.');
     }
   };
 
@@ -354,12 +358,12 @@ export const Solicitacoes = () => {
                     <td className="px-6 py-4">
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                         <Tag className="w-3 h-3" />
-                        {s.categoria.nome}
+                        {s.categoria?.nome || 'Sem categoria'}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-700 dark:text-slate-300">
-                      {s.solicitante.nome}
-                      {s.solicitante.id === usuario?.id && (
+                      {s.solicitante?.nome || 'Usuário indisponível'}
+                      {s.solicitante?.id === usuario?.id && (
                         <span className="ml-1 text-[10px] text-blue-600 dark:text-blue-400 font-bold">(Você)</span>
                       )}
                     </td>
@@ -450,6 +454,7 @@ export const Solicitacoes = () => {
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase mb-2">Descrição Detalhada</label>
                 <textarea
                   required
+                  minLength={5}
                   rows={4}
                   value={novaDescricao}
                   onChange={(e) => setNovaDescricao(e.target.value)}
