@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
 from sqlalchemy.orm import Session
+from typing import List
 import shutil
 import os
 from app.api.deps import obter_usuario_atual
@@ -68,3 +69,49 @@ def atualizar_usuario(
     db.commit()
     db.refresh(usuario_atual)
     return usuario_atual
+
+def get_current_admin_user(
+    current_user: Usuario = Depends(obter_usuario_atual)
+) -> Usuario:
+    if current_user.usuario.lower() != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Operação não permitida. Privilégios de administrador necessários."
+        )
+    return current_user
+
+# 2. Rota para listar todos os utilizadores (Apenas Admin)
+@router.get("/", response_model=List[UsuarioResposta])
+def listar_usuarios(
+    db: Session = Depends(get_db),
+    current_user: Usuario = Depends(get_current_admin_user)
+):
+    usuarios = db.query(Usuario).all()
+    return usuarios
+
+
+# 3. Rota para excluir um utilizador (Apenas Admin)
+@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+def excluir_usuario(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: Usuario = Depends(get_current_admin_user) # Injeta a verificação de admin
+):
+    usuario = db.query(Usuario).filter(Usuario.id == user_id).first()
+    
+    if not usuario:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail="Usuário não encontrado."
+        )
+        
+    # Prevenção: Evitar que o admin se exclua a si próprio (opcional, mas recomendado)
+    if usuario.id == current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="O administrador não pode excluir a sua própria conta."
+        )
+
+    db.delete(usuario)
+    db.commit()
+    return None
