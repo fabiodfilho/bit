@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import toast from 'react-hot-toast'; // Importação do Toast
+import { NovaSolicitacaoModal } from '../components/NovaSolicitacaoModal';
 import { 
   ClipboardList, 
   Search, 
@@ -36,11 +37,6 @@ export const Solicitacoes = () => {
   const [modalNovoAberto, setModalNovoAberto] = useState(false);
   const [modalCompartilharAberto, setModalCompartilharAberto] = useState(false);
   const [solicitacaoSelecionada, setSolicitacaoSelecionada] = useState(null);
-
-  // Formulário Nova Solicitação
-  const [novoTitulo, setNovoTitulo] = useState('');
-  const [novaDescricao, setNovaDescricao] = useState('');
-  const [novaCategoriaId, setNovaCategoriaId] = useState('');
 
   // Formulário Compartilhamento
   const [usuarioCompartilharId, setUsuarioCompartilharId] = useState('');
@@ -106,29 +102,6 @@ export const Solicitacoes = () => {
   const handleBuscarSubmit = (e) => {
     e.preventDefault();
     carregarSolicitacoes();
-  };
-
-  const handleCriarSolicitacao = async (e) => {
-    e.preventDefault();
-    try {
-      await api.post('/solicitacoes/', {
-        titulo: novoTitulo,
-        descricao: novaDescricao,
-        categoria_id: parseInt(novaCategoriaId)
-      });
-      toast.success('Solicitação criada com sucesso!');
-      fecharModalNovo();
-      setNovoTitulo('');
-      setNovaDescricao('');
-      setNovaCategoriaId('');
-      carregarSolicitacoes();
-    } catch (err) {
-      const detalhe = err.response?.data?.detail;
-      const mensagem = Array.isArray(detalhe)
-        ? detalhe.map((item) => item.msg).filter(Boolean).join(' ')
-        : detalhe;
-      toast.error(typeof mensagem === 'string' ? mensagem : 'Erro ao criar solicitação.');
-    }
   };
 
   const handleAlterarStatus = async (id, novoStatus) => {
@@ -413,74 +386,12 @@ export const Solicitacoes = () => {
         </div>
       )}
 
-      {/* Modal: Nova Solicitação */}
       {modalNovoAberto && (
-        <div className="fixed inset-0 bg-slate-950/50 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl max-w-lg w-full p-6 shadow-2xl">
-            <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold text-slate-900 dark:text-white">Criar Nova Solicitação</h2>
-                <button onClick={fecharModalNovo}><X className="w-5 h-5 text-slate-500 dark:text-slate-400" /></button>
-            </div>
-
-            <form onSubmit={handleCriarSolicitacao} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase mb-2">Título</label>
-                <input
-                  type="text"
-                  required
-                  value={novoTitulo}
-                  onChange={(e) => setNovoTitulo(e.target.value)}
-                  placeholder="Ex: Troca de mouse no setor Financeiro"
-                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase mb-2">Categoria</label>
-                <select
-                  required
-                  value={novaCategoriaId}
-                  onChange={(e) => setNovaCategoriaId(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-500"
-                >
-                  <option value="">Selecione uma categoria...</option>
-                  {categorias.map((cat) => (
-                    <option key={cat.id} value={cat.id}>{cat.nome}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase mb-2">Descrição Detalhada</label>
-                <textarea
-                  required
-                  minLength={5}
-                  rows={4}
-                  value={novaDescricao}
-                  onChange={(e) => setNovaDescricao(e.target.value)}
-                  placeholder="Descreva a necessidade ou o problema enfrentado..."
-                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-500"
-                ></textarea>
-              </div>
-
-              <div className="flex justify-end gap-3 pt-4">
-                <button
-                type="button"
-                onClick={fecharModalNovo}
-                className="px-4 py-2 rounded-lg text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
-                >
-                Cancelar
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm rounded-lg shadow-lg shadow-blue-600/30"
-                >
-                  Cadastrar Solicitação
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <NovaSolicitacaoModal
+          categorias={categorias}
+          onFechar={fecharModalNovo}
+          onCriada={carregarSolicitacoes}
+        />
       )}
 
       {/* Modal: Compartilhar Solicitação */}
