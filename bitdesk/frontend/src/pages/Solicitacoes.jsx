@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
-import toast from 'react-hot-toast'; // Importação do Toast
+import toast from 'react-hot-toast';
 import { NovaSolicitacaoModal } from '../components/NovaSolicitacaoModal';
 import { SolicitacaoDetalhesModal } from '../components/SolicitacaoDetalhesModal';
 import { 
@@ -21,26 +21,22 @@ export const Solicitacoes = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Estados de Dados
   const [solicitacoes, setSolicitacoes] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [usuariosColaboradores, setUsuariosColaboradores] = useState([]);
   const [carregando, setCarregando] = useState(true);
 
-  // Estados de Filtro e Ordenação
   const [aba, setAba] = useState('todas'); 
   const [busca, setBusca] = useState('');
   const [categoriaFiltro, setCategoriaFiltro] = useState('');
   const [statusFiltro, setStatusFiltro] = useState('');
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' }); // Estado de ordenação
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
-  // Modais
   const [modalNovoAberto, setModalNovoAberto] = useState(false);
   const [modalCompartilharAberto, setModalCompartilharAberto] = useState(false);
   const [modalDetalhesAberto, setModalDetalhesAberto] = useState(false);
   const [solicitacaoSelecionada, setSolicitacaoSelecionada] = useState(null);
 
-  // Formulário Compartilhamento
   const [usuarioCompartilharId, setUsuarioCompartilharId] = useState('');
 
   useEffect(() => {
@@ -154,7 +150,6 @@ export const Solicitacoes = () => {
     }
   };
 
-  // --- LÓGICA DE ORDENAÇÃO ---
   const handleSort = (key) => {
     let direction = 'asc';
     if (sortConfig.key === key && sortConfig.direction === 'asc') {
@@ -169,7 +164,6 @@ export const Solicitacoes = () => {
     let aValue = a[sortConfig.key];
     let bValue = b[sortConfig.key];
 
-    // Ajustes para campos aninhados
     if (sortConfig.key === 'categoria') {
       aValue = a.categoria?.nome || '';
       bValue = b.categoria?.nome || '';
@@ -197,7 +191,6 @@ export const Solicitacoes = () => {
   return (
     <div className="space-y-6">
       
-      {/* Cabeçalho */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-wide">Gerenciador de Solicitações</h1>
@@ -212,10 +205,8 @@ export const Solicitacoes = () => {
         </button>
       </div>
 
-      {/* Abas e Filtros */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-4">
         
-        {/* Abas (Todas / Minhas / Compartilhadas) */}
         <div className="flex border-b border-slate-200 dark:border-slate-800 gap-2 pb-2">
           {[
             { id: 'todas', label: 'Todas as Visíveis' },
@@ -236,7 +227,6 @@ export const Solicitacoes = () => {
           ))}
         </div>
 
-        {/* Barra de Pesquisa e Seletores */}
         <form onSubmit={handleBuscarSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           
           <div className="relative">
@@ -282,7 +272,6 @@ export const Solicitacoes = () => {
         </form>
       </div>
 
-      {/* Tabela de Listagem */}
       {carregando ? (
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (

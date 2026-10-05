@@ -23,10 +23,8 @@ export const Layout = () => {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 flex flex-col md:flex-row transition-colors duration-300">
       
-      {/* Sidebar Lateral */}
       <aside className="w-full md:w-64 bg-white border-r border-slate-200 dark:bg-slate-900 dark:border-slate-800 flex flex-col justify-between p-4 flex-shrink-0 transition-colors duration-300">
         <div>
-          {/* Logo */}
           <div className="flex items-center gap-3 px-3 py-4 mb-6 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
             <img
               src="/Logo-BitDesk.png"
@@ -35,7 +33,6 @@ export const Layout = () => {
             />
           </div>
 
-          {/* Navegação */}
           <nav className="space-y-1">
             {menuItems.map((item) => {
               const Icon = item.icon;
@@ -59,11 +56,9 @@ export const Layout = () => {
           </nav>
         </div>
 
-        {/* Perfil & Logout */}
         <div className="border-t border-slate-200 dark:border-slate-800 pt-4 mt-6 transition-colors duration-300">
           <div className="flex items-center justify-between px-3 py-2 bg-slate-100 border border-slate-200 dark:bg-slate-800/40 dark:border-slate-800 rounded-lg transition-colors duration-300">
             
-            {/* Transformamos esta div em um Link apontando para /perfil */}
             <Link to="/perfil" className="flex items-center gap-2 overflow-hidden hover:opacity-70 transition-opacity cursor-pointer">
             <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300 flex items-center justify-center flex-shrink-0 overflow-hidden transition-colors duration-300">
               {usuario?.avatar_url ? (
@@ -93,10 +88,8 @@ export const Layout = () => {
         </div>
       </aside>
 
-      {/* Área Principal de Conteúdo */}
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
         
-        {/* Header com o Botão de Tema */}
         <header className="flex justify-end items-center px-6 py-3 border-b border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-800 transition-colors duration-300">
           <button
             onClick={toggleTema}
@@ -107,7 +100,6 @@ export const Layout = () => {
           </button>
         </header>
 
-        {/* Conteúdo Dinâmico das Rotas */}
         <main className="flex-1 p-6 overflow-y-auto">
           <Outlet />
         </main>

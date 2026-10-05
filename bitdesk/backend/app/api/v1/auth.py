@@ -11,7 +11,6 @@ router = APIRouter(prefix="/auth", tags=["Autenticação"])
 @router.post("/cadastrar", response_model=UsuarioResposta, status_code=status.HTTP_201_CREATED)
 def cadastrar_usuario(dados: UsuarioCriar, db: Session = Depends(get_db)):
     """Cadastra um novo colaborador no sistema BitDesk."""
-    # Verificar se login já existe
     usuario_existente = db.query(Usuario).filter(Usuario.usuario == dados.usuario).first()
     if usuario_existente:
         raise HTTPException(
@@ -19,7 +18,6 @@ def cadastrar_usuario(dados: UsuarioCriar, db: Session = Depends(get_db)):
             detail="Este nome de usuário já está em uso."
         )
 
-    # Hash da senha antes de persistir
     novo_usuario = Usuario(
         nome=dados.nome,
         usuario=dados.usuario,
@@ -43,7 +41,6 @@ def login(dados: LoginRequest, db: Session = Depends(get_db)):
             detail="Usuário ou senha incorretos."
         )
 
-    # Gerar Token JWT com o ID do usuário como Subject
     token = criar_token_acesso(dados={"sub": str(usuario.id)})
 
     return {

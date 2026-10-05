@@ -13,7 +13,6 @@ class Usuario(Base):
     criado_em = Column(DateTime, default=datetime.utcnow, nullable=False)
     avatar_url = Column(String, nullable=True)
 
-    # Relacionamentos
     solicitacoes_criadas = relationship("Solicitacao", back_populates="solicitante")
     compartilhamentos = relationship("SolicitacaoCompartilhamento", back_populates="usuario")
 
@@ -24,7 +23,6 @@ class Categoria(Base):
     id = Column(Integer, primary_key=True, index=True)
     nome = Column(String(50), unique=True, nullable=False)
 
-    # Relacionamento
     solicitacoes = relationship("Solicitacao", back_populates="categoria")
 
 
@@ -41,7 +39,6 @@ class Solicitacao(Base):
     atualizado_em = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
     data_termino_previsto = Column(DateTime, nullable=True)
 
-    # Relacionamentos
     solicitante = relationship("Usuario", back_populates="solicitacoes_criadas")
     categoria = relationship("Categoria", back_populates="solicitacoes")
     compartilhamentos = relationship("SolicitacaoCompartilhamento", back_populates="solicitacao", cascade="all, delete-orphan")
@@ -59,7 +56,6 @@ class SolicitacaoCompartilhamento(Base):
     permissao = Column(String(20), default="LEITURA", nullable=False)
     compartilhado_em = Column(DateTime, default=datetime.utcnow, nullable=False)
 
-    # Relacionamentos
     solicitacao = relationship("Solicitacao", back_populates="compartilhamentos")
     usuario = relationship("Usuario", back_populates="compartilhamentos")
 

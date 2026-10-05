@@ -4,7 +4,6 @@ from jose import jwt, JWTError
 from passlib.context import CryptContext
 from app.core.config import settings
 
-# Configuração do contexto de hash utilizando Bcrypt
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def verificar_senha(senha_pura: str, senha_hash: str) -> bool:

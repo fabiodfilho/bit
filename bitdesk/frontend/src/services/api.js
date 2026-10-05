@@ -7,7 +7,6 @@ const api = axios.create({
   },
 });
 
-// Interceptor para anexar o Token JWT automaticamente se o utilizador estiver autenticado
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {

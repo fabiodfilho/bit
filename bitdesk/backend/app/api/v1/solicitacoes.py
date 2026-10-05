@@ -56,19 +56,16 @@ def listar_solicitacoes(
     """Lista solicitações com suporte a filtros avançados e abas."""
     query = db.query(Solicitacao).outerjoin(SolicitacaoCompartilhamento)
 
-    # Filtragem por permissão/visibilidade
     if aba == "minhas":
         query = query.filter(Solicitacao.solicitante_id == usuario_atual.id)
     elif aba == "compartilhadas":
         query = query.filter(SolicitacaoCompartilhamento.usuario_id == usuario_atual.id)
     else:
-        # Visível se for solicitante OU se foi compartilhada com ele
         query = query.filter(
             (Solicitacao.solicitante_id == usuario_atual.id) | 
             (SolicitacaoCompartilhamento.usuario_id == usuario_atual.id)
         )
 
-    # Filtros condicionais
     if status:
         query = query.filter(Solicitacao.status == status)
     if categoria_id:
@@ -111,7 +108,6 @@ def editar_solicitacao(
     if not solicitacao:
         raise HTTPException(status_code=404, detail="Solicitação não encontrada.")
 
-    # Regra de negócio do edital
     if solicitacao.status != "Aberto":
         raise HTTPException(
             status_code=400, 
@@ -149,7 +145,6 @@ def excluir_solicitacao(
     if solicitacao.solicitante_id != usuario_atual.id:
         raise HTTPException(status_code=403, detail="Apenas o criador pode excluir a solicitação.")
 
-    # Regra de negócio do edital
     if solicitacao.status != "Aberto":
         raise HTTPException(
             status_code=400, 
@@ -193,12 +188,10 @@ def compartilhar_solicitacao(
     if not solicitacao:
         raise HTTPException(status_code=404, detail="Solicitação não encontrada.")
 
-    # Verificar se o usuário existe
     usuario_destino = db.query(Usuario).filter(Usuario.id == dados.usuario_id).first()
     if not usuario_destino:
         raise HTTPException(status_code=404, detail="Usuário destino não encontrado.")
 
-    # Verificar se já está compartilhado
     comp_existente = db.query(SolicitacaoCompartilhamento).filter(
         SolicitacaoCompartilhamento.solicitacao_id == id,
         SolicitacaoCompartilhamento.usuario_id == dados.usuario_id

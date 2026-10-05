@@ -12,7 +12,6 @@ export const Perfil = () => {
   const [senha, setSenha] = useState('');
   const [carregando, setCarregando] = useState(false);
   
-  // Referência para o input de arquivo escondido
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -22,7 +21,6 @@ export const Perfil = () => {
     }
   }, [usuario]);
 
-  // Função para lidar com o upload da foto
   const handleFotoChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -39,7 +37,6 @@ export const Perfil = () => {
       
       toast.success('Foto de perfil atualizada!', { id: 'uploadToast' });
       
-      // Atualiza o estado global para a sidebar reagir imediatamente
       atualizarUsuarioLocal({ avatar_url: res.data.avatar_url });
       
     } catch (err) {
@@ -77,7 +74,6 @@ export const Perfil = () => {
 
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-sm transition-colors">
         
-        {/* ÁREA DA FOTO DE PERFIL */}
         <div className="flex items-center gap-6 mb-8 pb-6 border-b border-slate-200 dark:border-slate-800">
           <div className="relative group cursor-pointer" onClick={() => fileInputRef.current.click()}>
             <div className="w-20 h-20 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800 border-2 border-white dark:border-slate-700 shadow-lg flex items-center justify-center flex-shrink-0">
@@ -92,12 +88,10 @@ export const Perfil = () => {
               )}
             </div>
 
-            {/* Hover Escuro com Câmera */}
             <div className="absolute inset-0 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
               <Camera className="w-6 h-6 text-white" />
             </div>
 
-            {/* Input escondido */}
             <input 
               type="file" 
               accept="image/*" 
@@ -120,7 +114,6 @@ export const Perfil = () => {
           </div>
         </div>
 
-        {/* FORMULÁRIO DE DADOS */}
         <form onSubmit={handleSalvar} className="space-y-5">
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-300 uppercase mb-2">Nome Completo</label>

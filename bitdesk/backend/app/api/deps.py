@@ -6,7 +6,6 @@ from app.db.database import get_db
 from app.db.models import Usuario
 from app.core.config import settings
 
-# Esquema do tipo HTTP Bearer Token
 security = HTTPBearer()
 
 def obter_usuario_atual(

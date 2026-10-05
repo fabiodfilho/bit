@@ -80,7 +80,6 @@ def get_current_admin_user(
         )
     return current_user
 
-# 2. Rota para listar todos os utilizadores (Apenas Admin)
 @router.get("/", response_model=List[UsuarioResposta])
 def listar_usuarios(
     db: Session = Depends(get_db),
@@ -90,12 +89,11 @@ def listar_usuarios(
     return usuarios
 
 
-# 3. Rota para excluir um utilizador (Apenas Admin)
 @router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 def excluir_usuario(
     user_id: int,
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_admin_user) # Injeta a verificação de admin
+    current_user: Usuario = Depends(get_current_admin_user)
 ):
     usuario = db.query(Usuario).filter(Usuario.id == user_id).first()
     
@@ -105,7 +103,6 @@ def excluir_usuario(
             detail="Usuário não encontrado."
         )
         
-    # Prevenção: Evitar que o admin se exclua a si próprio (opcional, mas recomendado)
     if usuario.id == current_user.id:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

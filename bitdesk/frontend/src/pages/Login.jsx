@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import api from '../services/api'; // <--- Importação da API adicionada
+import api from '../services/api';
 import { LogIn, Lock, User as UserIcon, AlertCircle } from 'lucide-react';
 
 export const Login = () => {
@@ -24,14 +24,11 @@ export const Login = () => {
         senha: senhaInput
       });
 
-      // 1. Salva o token no navegador
       const token = res.data.access_token;
       localStorage.setItem('token', token);
 
-      // 2. Atualiza a instância para as próximas requisições
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-      // 3. Salva os dados do usuário no contexto
       login(res.data.usuario);
 
       navigate('/dashboard', { replace: true });
@@ -48,7 +45,6 @@ export const Login = () => {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 p-8">
         
-        {/* Cabeçalho do Card */}
         <div className="text-center mb-8">
           <div> 
             <img
@@ -60,7 +56,6 @@ export const Login = () => {
           <p className="text-slate-600 dark:text-slate-400 text-sm mt-1">Portal de Solicitações Internas</p>
         </div>
 
-        {/* Mensagem de Erro */}
         {erro && (
           <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg flex items-center gap-3 text-red-400 text-sm">
             <AlertCircle className="w-5 h-5 flex-shrink-0" />
@@ -68,7 +63,6 @@ export const Login = () => {
           </div>
         )}
 
-        {/* Formulário */}
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
@@ -104,7 +98,6 @@ export const Login = () => {
             </div>
           </div>
 
-          {/* O botão foi alterado de type="button" para type="submit" e o onClick foi removido */}
           <button
             type="submit"
             disabled={carregandoForm}

@@ -71,9 +71,6 @@ export const Dashboard = () => {
 
   return (
     <div className="space-y-8">
-      {/* Cabeçalho da Página */}
-      
-      {/* Cards de Métricas */}
       {carregando ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((i) => (
@@ -102,14 +99,12 @@ export const Dashboard = () => {
         </div>
       )}
 
-      {/* Barra de Progresso / Proporção de Status */}
       {!carregando && indicadores.total > 0 && (
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
           <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-4">
             Distribuição dos Status
           </h3>
           
-          {/* Barra Visual Proporcional */}
           <div className="h-4 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden flex">
             <div 
               style={{ width: `${(indicadores.abertas / indicadores.total) * 100}%` }} 
@@ -128,7 +123,6 @@ export const Dashboard = () => {
             ></div>
           </div>
 
-          {/* Legenda */}
           <div className="flex flex-wrap gap-6 mt-4 text-xs font-medium text-slate-600 dark:text-slate-400">
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full bg-amber-500"></span>
@@ -146,7 +140,6 @@ export const Dashboard = () => {
         </div>
       )}
 
-      {/* Banner de Ação Rápida */}
       <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h3 className="text-base font-semibold text-slate-900 dark:text-white">Gerenciar Solicitações</h3>

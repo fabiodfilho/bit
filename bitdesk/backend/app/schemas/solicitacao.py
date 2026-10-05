@@ -2,7 +2,6 @@ from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional, List
 
-# Schema base para informações de categoria/solicitante no retorno
 class CategoriaResumo(BaseModel):
     id: int
     nome: str
@@ -18,25 +17,21 @@ class UsuarioResumo(BaseModel):
     class Config:
         from_attributes = True
 
-# Schema de criação
 class SolicitacaoCriar(BaseModel):
     titulo: str = Field(..., min_length=3, max_length=150, example="Impressora do setor Financeiro com defeito")
     descricao: str = Field(..., min_length=5, example="A impressora não está puxando papel nem ligando o painel.")
     categoria_id: int = Field(..., example=1)
     data_termino_previsto: Optional[datetime] = None
 
-# Schema de edição
 class SolicitacaoAtualizar(BaseModel):
     titulo: Optional[str] = Field(None, min_length=1, max_length=150)
     descricao: Optional[str] = Field(None, min_length=1)
     data_termino_previsto: Optional[datetime] = None
     categoria_id: Optional[int] = None
 
-# Schema de alteração de status
 class SolicitacaoStatusAtualizar(BaseModel):
     status: str = Field(..., example="Em Atendimento")
 
-# Schema de compartilhamento
 class CompartilhamentoCriar(BaseModel):
     usuario_id: int = Field(..., example=2)
     permissao: str = Field("LEITURA", example="LEITURA")
@@ -49,7 +44,6 @@ class CompartilhamentoResposta(BaseModel):
     class Config:
         from_attributes = True
 
-# Schema completo de resposta da Solicitação
 class SolicitacaoResposta(BaseModel):
     id: int
     titulo: str

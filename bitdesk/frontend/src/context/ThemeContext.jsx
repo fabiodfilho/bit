@@ -3,7 +3,6 @@ import { createContext, useState, useEffect } from 'react';
 export const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  // Inicializa com 'light' como padrão, ou busca do localStorage se já existir
   const [tema, setTema] = useState(localStorage.getItem('tema') || 'light');
 
   useEffect(() => {
@@ -13,7 +12,6 @@ export const ThemeProvider = ({ children }) => {
     } else {
       root.classList.remove('dark');
     }
-    // Salva no navegador
     localStorage.setItem('tema', tema);
   }, [tema]);
 

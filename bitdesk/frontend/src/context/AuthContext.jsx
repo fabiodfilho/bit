@@ -29,7 +29,6 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('token');
   };
 
-  // NOVA FUNÇÃO: Atualiza os dados do usuário em tempo real
   const atualizarUsuarioLocal = (novosDados) => {
     setUsuario((prev) => {
       const userAtualizado = { ...prev, ...novosDados };

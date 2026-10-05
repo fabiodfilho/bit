@@ -24,10 +24,8 @@ export function App() {
         />
         <BrowserRouter>
           <Routes>
-            {/* Rota Pública */}
             <Route path="/login" element={<Login />} />
 
-            {/* Rotas Protegidas no Layout */}
             <Route element={<ProtectedRoute />}>
               <Route element={<Layout />}>
                 <Route path="/dashboard" element={<Dashboard />} />
@@ -39,7 +37,6 @@ export function App() {
               </Route>
             </Route>
 
-            {/* Redirecionamento padrão */}
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </BrowserRouter>
