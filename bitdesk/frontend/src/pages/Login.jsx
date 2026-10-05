@@ -75,7 +75,7 @@ export const Login = () => {
                 required
                 value={usuarioInput}
                 onChange={(e) => setUsuarioInput(e.target.value)}
-                placeholder="Ex: admin ou dev.junior"
+                placeholder="Ex: dev.bit"
                 className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 rounded-lg pl-10 pr-4 py-2.5 text-slate-900 dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
               />
             </div>
