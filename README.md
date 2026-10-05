@@ -329,7 +329,3 @@ cd frontend
 npm run test:run
 npm run build
 ```
-
-## Licença
-
-Este projeto ainda não possui um arquivo de licença definido. Antes de disponibilizá-lo publicamente, escolha e adicione uma licença compatível com o uso que você deseja permitir.
