@@ -2,6 +2,49 @@
 
 ## 1. Tecnologias Utilizadas
 
+## Execução dos testes
+
+Os testes não são executados automaticamente ao salvar arquivos. Para executá-los manualmente:
+
+### Backend
+
+Na raiz do projeto (`bitdesk`), com a virtualenv do backend configurada:
+
+```powershell
+.\backend\venv\Scripts\python.exe -m pytest
+```
+
+O arquivo `pytest.ini` configura o caminho do pacote `backend`, então o comando funciona mesmo sendo executado a partir da raiz.
+
+### Frontend
+
+```powershell
+Set-Location .\frontend
+npm run test:run
+```
+
+Para manter o Vitest observando alterações e reexecutando os testes:
+
+```powershell
+Set-Location .\frontend
+npm test
+```
+
+O modo de observação permanece ativo até ser interrompido com `Ctrl+C`.
+
+### Execução conjunta
+
+Em dois terminais separados:
+
+```powershell
+# Terminal 1
+.\backend\venv\Scripts\python.exe -m pytest
+
+# Terminal 2
+Set-Location .\frontend
+npm test
+```
+
 O BitDesk é uma aplicação web para gerenciamento de solicitações internas. O código está organizado em dois módulos principais dentro do projeto: `frontend` e `backend`.
 
 ### Frontend
@@ -43,7 +86,6 @@ O BitDesk é uma aplicação web para gerenciamento de solicitações internas. 
 - **Inicialização automática** das tabelas, categorias padrão e usuários de demonstração.
 - **Scripts de desenvolvimento e build** no `package.json` (`dev`, `build`, `lint` e `preview`).
 
-Não foram identificados no repositório arquivos de Docker/Compose, pipelines de CI/CD, serviços cloud, sistema de migrações (como Alembic), suíte de testes automatizados ou configuração de observabilidade.
 
 ## 2. Justificativa Técnica
 
@@ -184,8 +226,6 @@ O `Layout` fornece navegação lateral, perfil resumido, logout, alternância de
 - **Autorização incompleta em alguns fluxos:** a regra de usuário autenticado existe em boa parte das rotas, mas operações como upload de avatar não recebem a dependência de usuário atual. A alteração de status e o compartilhamento também não demonstram, no endpoint, uma verificação explícita de proprietário ou permissão de edição.
 - **Upload de arquivos:** o nome original do arquivo é usado no caminho e não há validação demonstrada de tamanho, extensão, MIME, conteúdo ou tratamento de nomes potencialmente perigosos.
 - **Credenciais de demonstração:** o startup cria `admin` e `dev.junior` com senha `123456`. Esse comportamento deve ser removido ou controlado por configuração antes de qualquer implantação real.
-- **Ausência de testes automatizados:** não foram encontrados testes de backend, frontend, integração ou contrato. Alterações em autenticação, filtros e permissões podem regredir sem detecção automática.
-- **Ausência de observabilidade e operação:** não há logging estruturado, métricas, tracing, health checks de dependências, política de backup ou documentação de implantação.
 - **Tratamento de erros no frontend:** várias telas registram erros no console ou exibem toasts, mas não existe uma estratégia global para expiração do token, indisponibilidade da API ou repetição de requisições.
 - **Escopo de permissões:** embora o compartilhamento possua `LEITURA` e `EDICAO`, as regras de aplicação dessas permissões não estão formalizadas em uma camada de autorização dedicada.
 
@@ -214,4 +254,3 @@ O `Layout` fornece navegação lateral, perfil resumido, logout, alternância de
 ### Decisões diferentes em um ambiente corporativo de produção
 
 Em produção corporativa, eu manteria a separação React/FastAPI e os contratos Pydantic, mas substituiria o bootstrap local por configuração gerenciada, PostgreSQL com migrações, secrets manager, CORS restrito, HTTPS obrigatório, autenticação integrada ao diretório corporativo (quando aplicável), RBAC persistido e trilhas de auditoria. Também adicionaria pipeline de CI/CD, imagens imutáveis, observabilidade, backups testados, verificação de vulnerabilidades, testes automatizados e armazenamento de arquivos dedicado. O frontend deixaria de depender de URLs hardcoded, e a política de sessão seria revisada para reduzir exposição de tokens no navegador.
-
