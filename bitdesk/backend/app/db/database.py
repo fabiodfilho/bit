@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.orm import sessionmaker, declarative_base
 from app.core.config import settings
 
@@ -21,3 +21,18 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+def ensure_solicitacao_due_date_column(database_engine=engine):
+    with database_engine.begin() as connection:
+        columns = {
+            column["name"]
+            for column in inspect(connection).get_columns("solicitacoes")
+        }
+        if "data_termino_previsto" not in columns:
+            connection.execute(
+                text(
+                    "ALTER TABLE solicitacoes "
+                    "ADD COLUMN data_termino_previsto TIMESTAMP"
+                )
+            )

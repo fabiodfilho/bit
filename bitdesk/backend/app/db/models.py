@@ -39,6 +39,7 @@ class Solicitacao(Base):
     status = Column(String(20), default="Aberto", nullable=False, index=True)
     criado_em = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
     atualizado_em = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    data_termino_previsto = Column(DateTime, nullable=True)
 
     # Relacionamentos
     solicitante = relationship("Usuario", back_populates="solicitacoes_criadas")

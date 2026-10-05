@@ -8,12 +8,12 @@ import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
 import { Solicitacoes } from './pages/Solicitacoes'; 
 import { Perfil } from './pages/Perfil';
+import { Calendario } from './pages/Calendario';
 
 export function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        {/* Configuração global do Toaster */}
         <Toaster 
           position="top-right" 
           toastOptions={{ 
@@ -35,6 +35,7 @@ export function App() {
                 <Route path="/solicitacoes/nova" element={<Solicitacoes />} />
                 <Route path="/" element={<Navigate to="/dashboard" replace />} />
                 <Route path="/perfil" element={<Perfil />} />
+                <Route path="/calendario" element={<Calendario />} />
               </Route>
             </Route>
 

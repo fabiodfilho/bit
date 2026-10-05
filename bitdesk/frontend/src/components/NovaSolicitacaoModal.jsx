@@ -7,6 +7,7 @@ export const NovaSolicitacaoModal = ({ categorias, onFechar, onCriada }) => {
   const [titulo, setTitulo] = useState('');
   const [descricao, setDescricao] = useState('');
   const [categoriaId, setCategoriaId] = useState('');
+  const [dataTerminoPrevisto, setDataTerminoPrevisto] = useState('');
   const [enviando, setEnviando] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -17,7 +18,10 @@ export const NovaSolicitacaoModal = ({ categorias, onFechar, onCriada }) => {
       await api.post('/solicitacoes/', {
         titulo,
         descricao,
-        categoria_id: parseInt(categoriaId, 10)
+        categoria_id: parseInt(categoriaId, 10),
+        data_termino_previsto: dataTerminoPrevisto
+          ? `${dataTerminoPrevisto}T00:00:00`
+          : null,
       });
       toast.success('Solicitação criada com sucesso!');
       onFechar();
@@ -80,6 +84,19 @@ export const NovaSolicitacaoModal = ({ categorias, onFechar, onCriada }) => {
               value={descricao}
               onChange={(e) => setDescricao(e.target.value)}
               placeholder="Descreva a necessidade ou o problema enfrentado..."
+              className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-500"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="data-termino-previsto" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase mb-2">
+              Data prevista de término (opcional)
+            </label>
+            <input
+              id="data-termino-previsto"
+              type="date"
+              value={dataTerminoPrevisto}
+              onChange={(e) => setDataTerminoPrevisto(e.target.value)}
               className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-500"
             />
           </div>

@@ -1,6 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.db.database import engine, Base, SessionLocal
+from app.db.database import (
+    engine,
+    Base,
+    SessionLocal,
+    ensure_solicitacao_due_date_column,
+)
 from app.db.models import Categoria, Usuario
 from app.core.security import gerar_hash_senha
 from app.api.v1.auth import router as auth_router
@@ -13,6 +18,7 @@ import os
 
 os.makedirs("uploads/avatars", exist_ok=True)
 Base.metadata.create_all(bind=engine)
+ensure_solicitacao_due_date_column()
 
 app = FastAPI(
     title="BitDesk API",

@@ -182,3 +182,13 @@
     border-right-color: var(--border);
   }
 }
+
+.dark .fc-theme-standard td, 
+.dark .fc-theme-standard th, 
+.dark .fc-theme-standard .fc-scrollgrid {
+  border-color: #334155; 
+}
+.dark .fc-col-header-cell-cushion, 
+.dark .fc-daygrid-day-number {
+  color: #f8fafc; 
+}

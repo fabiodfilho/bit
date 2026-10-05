@@ -4,6 +4,7 @@ import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import toast from 'react-hot-toast'; // Importação do Toast
 import { NovaSolicitacaoModal } from '../components/NovaSolicitacaoModal';
+import { SolicitacaoDetalhesModal } from '../components/SolicitacaoDetalhesModal';
 import { 
   ClipboardList, 
   Search, 
@@ -36,6 +37,7 @@ export const Solicitacoes = () => {
   // Modais
   const [modalNovoAberto, setModalNovoAberto] = useState(false);
   const [modalCompartilharAberto, setModalCompartilharAberto] = useState(false);
+  const [modalDetalhesAberto, setModalDetalhesAberto] = useState(false);
   const [solicitacaoSelecionada, setSolicitacaoSelecionada] = useState(null);
 
   // Formulário Compartilhamento
@@ -326,7 +328,17 @@ export const Solicitacoes = () => {
                     <td className="px-6 py-4 font-mono text-xs text-slate-500 dark:text-slate-400">#{s.id}</td>
                     <td className="px-6 py-4">
                       <p className="font-semibold text-slate-900 dark:text-slate-100">{s.titulo}</p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-xs">{s.descricao}</p>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSolicitacaoSelecionada(s);
+                          setModalDetalhesAberto(true);
+                        }}
+                        className="block max-w-xs truncate text-left text-xs text-slate-500 underline decoration-dotted underline-offset-2 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400"
+                        title="Clique para ver a descrição completa"
+                      >
+                        {s.descricao}
+                      </button>
                     </td>
                     <td className="px-6 py-4">
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
@@ -341,7 +353,12 @@ export const Solicitacoes = () => {
                       )}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
-                      {new Date(s.criado_em).toLocaleDateString('pt-BR')}
+                      <span className="block dark:text-slate-100">Criada: {new Date(s.criado_em).toLocaleDateString('pt-BR')}</span>
+                      {s.data_termino_previsto && (
+                        <span className="text-[10px]">
+                          Término: {s.data_termino_previsto.split('T')[0].split('-').reverse().join('/')}
+                        </span>
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <select
@@ -394,7 +411,16 @@ export const Solicitacoes = () => {
         />
       )}
 
-      {/* Modal: Compartilhar Solicitação */}
+      {modalDetalhesAberto && solicitacaoSelecionada && (
+        <SolicitacaoDetalhesModal
+          solicitacao={solicitacaoSelecionada}
+          onFechar={() => {
+            setModalDetalhesAberto(false);
+            setSolicitacaoSelecionada(null);
+          }}
+        />
+      )}
+
       {modalCompartilharAberto && solicitacaoSelecionada && (
         <div className="fixed inset-0 bg-slate-950/50 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl max-w-md w-full p-6 shadow-2xl">

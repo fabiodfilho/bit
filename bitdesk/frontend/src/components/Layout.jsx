@@ -2,8 +2,7 @@ import { useContext } from 'react';
 import { Outlet, Link, NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { ThemeContext } from '../context/ThemeContext'; 
-import { LayoutDashboard, ClipboardList, PlusCircle, LogOut, User, Sun, Moon } from 'lucide-react'; // Ícones de Sol e Lua
-
+import { LayoutDashboard, ClipboardList, PlusCircle, LogOut, User, Sun, Moon, Calendar } from 'lucide-react';
 export const Layout = () => {
   const { usuario, logout } = useContext(AuthContext);
   const { tema, toggleTema } = useContext(ThemeContext); 
@@ -17,6 +16,7 @@ export const Layout = () => {
   const menuItems = [
     { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { label: 'Solicitações', path: '/solicitacoes', icon: ClipboardList },
+    { label: 'Calendário', path: '/calendario', icon: Calendar },
     { label: 'Nova Solicitação', path: '/solicitacoes/nova', icon: PlusCircle },
   ];
 

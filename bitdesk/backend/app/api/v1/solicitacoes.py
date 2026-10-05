@@ -32,7 +32,8 @@ def criar_solicitacao(
         descricao=dados.descricao,
         categoria_id=dados.categoria_id,
         solicitante_id=usuario_atual.id,
-        status="Aberto"
+        status="Aberto",
+        data_termino_previsto=dados.data_termino_previsto,
     )
     
     db.add(nova_solicitacao)
@@ -126,6 +127,8 @@ def editar_solicitacao(
         solicitacao.descricao = dados.descricao
     if dados.categoria_id:
         solicitacao.categoria_id = dados.categoria_id
+    if "data_termino_previsto" in dados.model_fields_set:
+        solicitacao.data_termino_previsto = dados.data_termino_previsto
 
     db.commit()
     db.refresh(solicitacao)
