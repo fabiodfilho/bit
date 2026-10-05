@@ -292,22 +292,6 @@ Para PostgreSQL, substitua `DATABASE_URL` por uma URL compatível com SQLAlchemy
 DATABASE_URL=postgresql+psycopg2://usuario:senha@localhost:5432/bitdesk
 ```
 
-## Segurança
-
-Antes de publicar ou disponibilizar o sistema em produção:
-
-- Gere uma `SECRET_KEY` forte e exclusiva.
-- Nunca publique o arquivo `.env`, tokens, senhas ou bancos locais.
-- Troque ou remova as credenciais administrativas criadas automaticamente no startup.
-- Restrinja `allow_origins` do CORS aos domínios reais do frontend.
-- Use HTTPS.
-- Configure corretamente permissões e limites para uploads.
-- Revise o tempo de expiração dos tokens.
-- Não use o banco SQLite local como banco de produção sem avaliar concorrência, backup e permissões.
-- Remova arquivos, bancos e uploads locais que contenham dados reais antes de tornar o repositório público.
-
-O `.gitignore` já inclui ambientes virtuais, bancos SQLite, arquivos `.env` e caches comuns. Ainda assim, revise o histórico do Git antes de publicar para garantir que nenhum segredo tenha sido commitado anteriormente.
-
 ## Contribuição
 
 1. Crie uma branch para sua alteração:
