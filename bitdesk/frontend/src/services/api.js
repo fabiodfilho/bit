@@ -7,6 +7,12 @@ const api = axios.create({
   },
 });
 
+export const getAssetUrl = (path) => {
+  if (!path) return '';
+  if (/^https?:\/\//i.test(path)) return path;
+  return new URL(path, api.defaults.baseURL).toString();
+};
+
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {

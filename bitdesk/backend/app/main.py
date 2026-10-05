@@ -14,9 +14,9 @@ from app.api.v1.dashboard import router as dashboard_router
 from app.api.v1.auxiliares import router as auxiliares_router  
 from app.api.v1.usuarios import router as usuarios_router
 from fastapi.staticfiles import StaticFiles
-import os
+from app.core.storage import AVATARS_DIR, UPLOADS_DIR
 
-os.makedirs("uploads/avatars", exist_ok=True)
+AVATARS_DIR.mkdir(parents=True, exist_ok=True)
 Base.metadata.create_all(bind=engine)
 ensure_solicitacao_due_date_column()
 
@@ -26,7 +26,7 @@ app = FastAPI(
     version="1.0.0",
 )
 
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+app.mount("/uploads", StaticFiles(directory=str(UPLOADS_DIR)), name="uploads")
 
 app.add_middleware(
     CORSMiddleware,

@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { Outlet, Link, NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { ThemeContext } from '../context/ThemeContext'; 
+import { getAssetUrl } from '../services/api';
 import { LayoutDashboard, ClipboardList, PlusCircle, LogOut, User, Sun, Moon, Calendar } from 'lucide-react';
 export const Layout = () => {
   const { usuario, logout } = useContext(AuthContext);
@@ -63,7 +64,7 @@ export const Layout = () => {
             <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300 flex items-center justify-center flex-shrink-0 overflow-hidden transition-colors duration-300">
               {usuario?.avatar_url ? (
                 <img 
-                  src={`http://localhost:8000${usuario.avatar_url}`} 
+                  src={getAssetUrl(usuario.avatar_url)}
                   alt="Perfil" 
                   className="w-full h-full object-cover" 
                 />

@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect, useRef } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import api from '../services/api';
+import api, { getAssetUrl } from '../services/api';
 import toast from 'react-hot-toast';
 import { User, Save, Camera } from 'lucide-react';
 
@@ -79,7 +79,7 @@ export const Perfil = () => {
             <div className="w-20 h-20 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800 border-2 border-white dark:border-slate-700 shadow-lg flex items-center justify-center flex-shrink-0">
               {usuario?.avatar_url ? (
                 <img 
-                  src={`http://localhost:8000${usuario.avatar_url}`} 
+                  src={getAssetUrl(usuario.avatar_url)}
                   alt="Foto de perfil" 
                   className="w-full h-full object-cover"
                 />

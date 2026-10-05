@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
 from sqlalchemy.orm import Session
 from typing import List
 import shutil
-import os
+from app.core.storage import AVATARS_DIR
 from app.api.deps import obter_usuario_atual
 from app.core.security import gerar_hash_senha
 from app.db.database import get_db
@@ -13,11 +13,11 @@ router = APIRouter(prefix="/usuarios", tags=["Usuários"])
 
 @router.post("/{user_id}/avatar")
 async def upload_avatar(user_id: int, file: UploadFile = File(...), db: Session = Depends(get_db)):
-    os.makedirs("uploads/avatars", exist_ok=True)
+    AVATARS_DIR.mkdir(parents=True, exist_ok=True)
     
-    file_path = f"uploads/avatars/{user_id}_{file.filename}"
+    file_path = AVATARS_DIR / f"{user_id}_{file.filename}"
     
-    with open(file_path, "wb") as buffer:
+    with file_path.open("wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
         
     avatar_url = f"/uploads/avatars/{user_id}_{file.filename}"
